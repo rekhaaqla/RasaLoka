@@ -1,0 +1,627 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#123c32">
+
+    <title>Admin Dashboard | RasaLoka</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --green: #174b3d;
+            --green-dark: #10372e;
+            --green-light: #e7f1eb;
+            --cream: #f7f6f0;
+            --white: #ffffff;
+            --text: #23332d;
+            --muted: #77827b;
+            --border: #e5e9e3;
+            --orange: #dc8a43;
+            --red: #c94f4f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--cream);
+            color: var(--text);
+            font-family: "DM Sans", sans-serif;
+            min-height: 100vh;
+        }
+
+        button, input, select, textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .topbar {
+            background: var(--green-dark);
+            color: white;
+            padding: 20px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            font-family: "Playfair Display", serif;
+            font-size: 27px;
+            font-weight: 700;
+            letter-spacing: .3px;
+        }
+
+        .brand span {
+            color: #e9b978;
+        }
+
+        .topbar small {
+            display: block;
+            margin-top: 4px;
+            color: #c9d9d0;
+            font-size: 12px;
+        }
+
+        .back-link {
+            color: white;
+            border: 1px solid #6d8a7e;
+            border-radius: 9px;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .container {
+            width: min(1200px, 92%);
+            margin: 32px auto 60px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .eyebrow {
+            color: #b97839;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-bottom: 9px;
+        }
+
+        h1, h2 {
+            font-family: "Playfair Display", serif;
+        }
+
+        h1 {
+            font-size: clamp(27px, 4vw, 37px);
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            color: var(--muted);
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 17px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card, .panel {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 7px 25px rgba(26, 55, 39, .035);
+        }
+
+        .stat-card {
+            padding: 22px;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .stat-number {
+            font-size: 31px;
+            font-weight: 700;
+            margin-top: 9px;
+            color: var(--green);
+        }
+
+        .workspace {
+            display: grid;
+            grid-template-columns: minmax(300px, .85fr) minmax(0, 1.35fr);
+            align-items: start;
+            gap: 22px;
+        }
+
+        .panel {
+            padding: 24px;
+            min-width: 0;
+        }
+
+        .panel-heading {
+            margin-bottom: 22px;
+        }
+
+        .panel-heading h2 {
+            font-size: 22px;
+            margin-bottom: 6px;
+        }
+
+        .panel-heading p {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .field {
+            margin-bottom: 16px;
+        }
+
+        .field label {
+            display: block;
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .field input:not([type="checkbox"]):not([type="file"]),
+        .field select,
+        .field textarea {
+            display: block;
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #dfe5de;
+            border-radius: 9px;
+            outline: none;
+            background: #fff;
+            color: var(--text);
+            font-size: 13px;
+            transition: border .2s, box-shadow .2s;
+        }
+
+        .field textarea {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.6;
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(23, 75, 61, .08);
+        }
+
+        .field input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px dashed #cbd8cd;
+            border-radius: 9px;
+            background: #f8faf7;
+            font-size: 12px;
+        }
+
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .hint {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 7px;
+            line-height: 1.5;
+        }
+
+        #imagePreview {
+            display: none;
+            width: 100%;
+            max-height: 230px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-top: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px;
+            border-radius: 9px;
+            background: #f6f9f5;
+            margin: 4px 0 18px;
+            font-size: 13px;
+        }
+
+        .checkbox-row input {
+            accent-color: var(--green);
+            width: 16px;
+            height: 16px;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 9px;
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 700;
+            transition: .2s;
+        }
+
+        .btn:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: var(--green);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--green-dark);
+        }
+
+        .btn-secondary {
+            background: #edf0eb;
+            color: var(--text);
+        }
+
+        .btn-danger {
+            background: #fff0ef;
+            color: var(--red);
+        }
+
+        .btn-small {
+            padding: 8px 10px;
+            font-size: 11px;
+        }
+
+        .message {
+            font-size: 12px;
+            line-height: 1.6;
+            margin-top: 12px;
+            overflow-wrap: anywhere;
+        }
+
+        .message:empty {
+            display: none;
+        }
+
+        .message.success {
+            color: #267447;
+        }
+
+        .message.error {
+            color: #c03939;
+        }
+
+        .message.info {
+            color: #65736b;
+        }
+
+        .list-toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .list-toolbar input {
+            flex: 1;
+            min-width: 0;
+            padding: 11px 12px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            outline: none;
+            font-size: 12px;
+        }
+
+        .content-list {
+            display: grid;
+            gap: 13px;
+        }
+
+        .content-item {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            gap: 13px;
+            align-items: flex-start;
+            min-width: 0;
+        }
+
+        .content-thumb {
+            width: 92px;
+            height: 92px;
+            flex: 0 0 92px;
+            border-radius: 9px;
+            object-fit: cover;
+            background: var(--green-light);
+        }
+
+        .no-image {
+            display: grid;
+            place-items: center;
+            color: var(--green);
+            font-size: 10px;
+            text-align: center;
+            padding: 8px;
+        }
+
+        .content-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .content-info h3 {
+            font-size: 14px;
+            margin: 3px 0 7px;
+            overflow-wrap: anywhere;
+        }
+
+        .content-meta {
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .status {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 5px 8px;
+            border-radius: 20px;
+        }
+
+        .status-published {
+            color: #236b42;
+            background: #e7f5e9;
+        }
+
+        .status-draft {
+            color: #8c6525;
+            background: #fff3dc;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .empty-state {
+            padding: 35px 15px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            line-height: 1.7;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 11px;
+            padding: 25px 15px;
+        }
+
+        @media (max-width: 850px) {
+            .workspace {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .stats {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 17px;
+            }
+
+            .stat-number {
+                font-size: 26px;
+            }
+
+            .panel {
+                padding: 17px;
+            }
+
+            .two-columns {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .content-thumb {
+                width: 72px;
+                height: 72px;
+                flex-basis: 72px;
+            }
+
+            .list-toolbar {
+                flex-wrap: wrap;
+            }
+
+            .list-toolbar input {
+                flex-basis: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div>
+            <div class="brand">Rasa<span>Loka.</span></div>
+            <small>Content Management Dashboard</small>
+        </div>
+
+        <a class="back-link" href="index.html">← Kembali ke Website</a>
+    </header>
+
+    <main class="container">
+        <section class="page-heading">
+            <div class="eyebrow">Admin Workspace</div>
+            <h1>Kelola Konten RasaLoka</h1>
+            <p>Tambahkan destinasi, kuliner, dan budaya lokal Indonesia untuk ditampilkan di website.</p>
+        </section>
+
+        <section class="stats">
+            <div class="stat-card">
+                <div class="stat-label">Total Konten</div>
+                <div class="stat-number" id="totalContent">0</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Konten Dipublikasikan</div>
+                <div class="stat-number" id="publishedContent">0</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Konten Draft</div>
+                <div class="stat-number" id="draftContent">0</div>
+            </div>
+        </section>
+
+        <section class="workspace">
+            <div class="panel" id="formPanel">
+                <div class="panel-heading">
+                    <h2 id="formTitle">Tambah Konten</h2>
+                    <p>Isi informasi konten. Kolom bertanda * wajib diisi.</p>
+                </div>
+
+                <form id="contentForm">
+                    <input type="hidden" id="contentId">
+
+                    <div class="field">
+                        <label for="title">Nama Konten *</label>
+                        <input id="title" type="text" placeholder="Contoh: Pantai Lampuuk" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="category">Kategori *</label>
+                        <select id="category" required>
+                            <option value="">Pilih kategori</option>
+                            <option value="Kuliner">Kuliner</option>
+                            <option value="Budaya">Budaya</option>
+                            <option value="Destinasi">Destinasi</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="region">Daerah *</label>
+                        <input id="region" type="text" placeholder="Contoh: Aceh Besar" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="description">Deskripsi *</label>
+                        <textarea id="description" placeholder="Ceritakan keunikan konten ini..." required></textarea>
+                    </div>
+
+                    <div class="field">
+                        <label for="imageFile">Foto Konten</label>
+                        <input type="file" id="imageFile" accept="image/*">
+                        <p class="hint">Pilih foto JPG, PNG, atau WebP. Maksimal 5 MB.</p>
+                        <img id="imagePreview" alt="Preview foto konten">
+                        <p id="imageMessage" class="message"></p>
+                    </div>
+
+                    <div class="field">
+                        <label for="address">Alamat / Lokasi</label>
+                        <input id="address" type="text" placeholder="Alamat atau lokasi konten">
+                    </div>
+
+                    <div class="two-columns">
+                        <div class="field">
+                            <label for="latitude">Latitude</label>
+                            <input id="latitude" type="number" step="any" placeholder="5.55">
+                        </div>
+
+                        <div class="field">
+                            <label for="longitude">Longitude</label>
+                            <input id="longitude" type="number" step="any" placeholder="95.32">
+                        </div>
+                    </div>
+
+                    <label class="checkbox-row" for="published">
+                        <input type="checkbox" id="published">
+                        <span>Publikasikan konten di website</span>
+                    </label>
+
+                    <div class="button-row">
+                        <button class="btn btn-primary" type="submit" id="saveBtn">Simpan Konten</button>
+                        <button class="btn btn-secondary" type="button" id="cancelBtn">Reset</button>
+                    </div>
+
+                    <p id="formMessage" class="message" role="status" aria-live="polite"></p>
+                </form>
+            </div>
+
+            <div class="panel">
+                <div class="panel-heading">
+                    <h2>Daftar Konten</h2>
+                    <p>Konten yang tersimpan di database Supabase.</p>
+                </div>
+
+                <div class="list-toolbar">
+                    <input type="search" id="searchInput" placeholder="Cari nama, daerah, kategori...">
+                    <button class="btn btn-secondary" type="button" id="refreshBtn">↻ Muat Ulang</button>
+                </div>
+
+                <p id="listMessage" class="message" role="status" aria-live="polite"></p>
+
+                <div id="contentList" class="content-list">
+                    <div class="empty-state">Memuat konten...</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        RasaLoka Admin Dashboard · Discover the beauty of Indonesia
+    </footer>
+
+    <!-- Supabase CDN: hanya dimuat satu kali -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Semua logika dashboard berada di file admin.js -->
+    <script src="admin.js"></script>
+</body>
+</html>
